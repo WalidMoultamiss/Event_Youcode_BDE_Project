@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Flights</title>
+    <!-- MDB icon -->
+    <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css" />
+    <!-- Google Fonts Roboto -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+    <!-- MDB -->
+
+    <link rel="stylesheet" href="../bootstrqp/src/scss/mdb.free.css" />
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+
+<body>
+    <div class="overlay"></div>
+    <div id="wrapper">
+        <nav class="fixed-top justify-content-center toggled" id="sidebar-wrapper" role="navigation">
+            <div class="d-flex flex-column p-3 text-white bg-dark sidebarNav">
+                <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                    <svg class="bi me-2" width="40" height="32">
+                        <use xlink:href="#bootstrap" />
+                    </svg>
+                    <span id="sidebarUsername"  class="fs-4"></span>
+                </a>
+                <hr>
+                <ul class="nav nav-pills flex-column mb-auto mt-5">
+                    <li>
+                        <a href="/" class="nav-link text-white ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-house-fill" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                    d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6zm5-.793V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z" />
+                                <path fill-rule="evenodd"
+                                    d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z" />
+                            </svg>
+                            Home
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link text-white active">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-speedometer2" viewBox="0 0 16 16">
+                                <path
+                                    d="M8 4a.5.5 0 0 1 .5.5V6a.5.5 0 0 1-1 0V4.5A.5.5 0 0 1 8 4zM3.732 5.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707zM2 10a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 10zm9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5zm.754-4.246a.389.389 0 0 0-.527-.02L7.547 9.31a.91.91 0 1 0 1.302 1.258l3.434-4.297a.389.389 0 0 0-.029-.518z" />
+                                <path fill-rule="evenodd"
+                                    d="M0 10a8 8 0 1 1 15.547 2.661c-.442 1.253-1.845 1.602-2.932 1.25C11.309 13.488 9.475 13 8 13c-1.474 0-3.31.488-4.615.911-1.087.352-2.49.003-2.932-1.25A7.988 7.988 0 0 1 0 10zm8-7a7 7 0 0 0-6.603 9.329c.203.575.923.876 1.68.63C4.397 12.533 6.358 12 8 12s3.604.532 4.923.96c.757.245 1.477-.056 1.68-.631A7 7 0 0 0 8 3z" />
+                            </svg>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="myreservations.html" class="nav-link text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-bag-check-fill" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                    d="M10.5 3.5a2.5 2.5 0 0 0-5 0V4h5v-.5zm1 0V4H15v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4h3.5v-.5a3.5 3.5 0 1 1 7 0zm-.646 5.354a.5.5 0 0 0-.708-.708L7.5 10.793 6.354 9.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z" />
+                            </svg>
+                            reservations
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="customers.html" class="nav-link text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-person-bounding-box" viewBox="0 0 16 16">
+                                <path
+                                    d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1h-3zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5zM.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5z" />
+                                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                            </svg>
+                            Customers
+                        </a>
+                    </li>
+                </ul>
+                <hr>
+                <div>
+                    <div class="d-flex align-items-center text-white text-decoration-none">
+                        <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32"
+                            class="rounded-circle me-2">
+                        <strong onclick="logout()">LOGOUT</strong>
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+        <div id="page-content-wrapper" class="toggled">
+
+
+            <div id="content">
+
+                <div class="container-fluid p-0 px-lg-0 px-md-0">
+                    <!-- Topbar -->
+                    <nav class="navbar navbar-expand my-navbar p-3" style="background-color: #262626 ;">
+
+                        <!-- Sidebar Toggle (Topbar) -->
+                        <div type="button" id="bar" class="nav-icon1 hamburger animated fadeInLeft is-closed open"
+                            data-toggle="offcanvas">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+
+
+                    </nav>
+                    <!-- End of Topbar -->
+
+                    <!-- Begin Page Content -->
+                    <div class="container-fluid px-lg-4">
+
+                        <div class="row my-4">
+                            <div class="col-md-11 mx-auto">
+                                <div class="card">
+                                    <div class="card-body bg-lights">
+                                        <span id="addFlight" onclick="showModal()">
+                                            <i class="fas fa-plus-square"
+                                                style="font-size: 35px; margin-left:8px;color:blue;cursor:pointer;"></i>
+                                        </span>
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th class="th-hover" scope="col">Airport</th>
+                                                    <th class="th-hover" scope="col">City</th>
+                                                    <th class="th-hover" scope="col">Destination</th>
+                                                    <th class="th-hover" scope="col">Date</th>
+                                                    <th class="th-hover" scope="col">Time</th>
+                                                    <th class="th-hover" scope="col">Price</th>
+                                                    <th class="th-hover" scope="col">Places</th>
+                                                </tr>
+
+                                            </thead>
+                                            <tbody id="flights">
+
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- /.container-fluid -->
+
+                </div>
+            </div>
+        </div>
+        <!-- Button trigger modal -->
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Deleting confirmation</h5>
+                        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">Are You Sure You Want To delete This Flight ?</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                            CANCEL
+                        </button>
+                        <button type="button" id='ConfimeDeleteFlight' class="btn btn-danger" data-mdb-dismiss="modal">
+                            DELETE
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- add modal -->
+        <div id="addModal">
+            <form id="addForm" class="formContainer needs-validation">
+
+                <i onclick="closeModal()" id="closeModal" class="fas fa-window-close"></i>
+
+                <!-- 2 column grid layout with text inputs for the first and last names -->
+                <h4>add new flight</h4>
+                <div class="row mb-4">
+                    <div class="col">
+                        <div class="form-outline">
+                            <input type="datetime-local" id="going_time" class="form-control" required />
+                            <label class="form-label" for="going_time">Going Time</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-outline">
+                            <input type="datetime-local" id="arriving_time" class="form-control" required />
+                            <label class="form-label" for="arriving_time">Arriving Time</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Text input -->
+                <div class="form-outline mb-4">
+                    <input type="text" id="Country_from" class="form-control" required />
+                    <label class="form-label" for="Country_from">Country from</label>
+                </div>
+
+                <!-- Text input -->
+                <div class="form-outline mb-4">
+                    <input type="text" id="Country_to" class="form-control" required />
+                    <label class="form-label" for="Country_to">Country to</label>
+                </div>
+
+                <div class="form-outline mb-4">
+                    <input type="text" id="CityFrom" class="form-control" required />
+                    <label class="form-label" for="CityFrom">City From</label>
+                </div>
+
+                <div class="form-outline mb-4">
+                    <input type="text" id="CityTo" class="form-control" required />
+                    <label class="form-label" for="CityFrom">City To</label>
+                </div>
+
+                <div class="form-outline mb-4">
+                    <input type="number" id="available_places" class="form-control" required />
+                    <label class="form-label" for="available_places">Number of places</label>
+                </div>
+
+                <div class="form-outline mb-4">
+                    <input type="number" id="price" class="form-control" required />
+                    <label class="form-label" for="price">Price</label>
+                </div>
+                <div class="form-outline mb-4">
+                    <input type="text" id="airport" class="form-control" required />
+                    <label class="form-label" for="airport">Airport Name</label>
+                </div>
+
+
+                <!-- Submit button -->
+                <button onclick="addForm(event)" class="btn btn-primary btn-block mb-4">Add</button>
+            </form>
+        </div>
+    </div>
+    <!-- Pills content -->
+    <!-- End your project here-->
+
+    <!-- MDB -->
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+
+
+    
+    <script type="text/javascript" src="../bootstrqp/js/mdb.min.js"></script>
+    <!-- Custom scripts -->
+    <script type="text/javascript"></script>
+    <script src="../../js/classes/Flight.js"></script>
+    <script src="../../js/classes/User.js"></script>
+    <script src="../../js/auth.js"></script>
+    <script src="../../js/admin.js"></script>
+    <script src="../../js/Flights.js"></script>
+    <script src="../../js/nav.js"></script>
+</body>
+
+</html>
