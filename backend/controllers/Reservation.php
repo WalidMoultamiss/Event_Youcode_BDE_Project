@@ -14,7 +14,7 @@ class Reservation extends Controller
         $this->flightModel = $this->model('FlightModel');
     }
 
-    public function me()
+    public function myReservation()
     {
         $headers = apache_request_headers();
         $headers = isset($headers['Authorization']) ? explode(' ', $headers['Authorization']) : null;
@@ -38,14 +38,15 @@ class Reservation extends Controller
         if ($headers) {
             try {
                 $infos = $this->verifyAuth($headers[1]);
-                if ($infos->role == "Admin") {
+                // dint forget student to admin
+                if ($infos->role == "student") {
                     $reservations = $this->resModel->getReservations();
                     if ($reservations) {
                         print_r(json_encode($reservations));
                     }
                 } else {
                     print_r(json_encode(array(
-                        'error' => "You Don't Have Permition to make this action 💢 ",
+                        'error' => "You Don't Have Permission to make this action 💢 ",
                     )));
                     die();
                 }
@@ -71,23 +72,18 @@ class Reservation extends Controller
         $cin = $cin->cin;
         if ($headers) {
             try {
-                $currentfilght = $this->flightModel->flightInfo($this->data->flight);
-                if ($currentfilght) {
-                    if ($this->data->accepted_return == 1 && $currentfilght->available_places >= $this->data->guests) {
-                        $result = $this->resModel->addWithReturn($this->data);
-                        $currentfilght->available_places = $currentfilght->available_places - $this->data->guests;
-                        $this->flightModel->edit($currentfilght, $this->data->flight);
-
-                    } else if ($currentfilght->available_places >= $this->data->guests) {
+                $currentEvent = $this->eventModel->eventInfo($this->data->event);
+                if ($currentEvent) {
+                    if ($currentEvent->available_places >= $this->data->guests) {
                         $result = $this->resModel->add($this->data);
-                        $currentfilght->available_places = $currentfilght->available_places - $this->data->guests;
-                        $this->flightModel->edit($currentfilght, $this->data->flight);
+                        $currentEvent->available_places = $currentEvent->available_places - $this->data->guests;
+                        $this->eventModel->edit($currentEvent, $this->data->event);
                     } else {
-                        print_r(json_encode(array('error' => 'Plane Full bro 😩')));
+                        print_r(json_encode(array('error' => 'Event Full bro 😩')));
                         die();
                     };
                 } else {
-                    print_r(json_encode(array('error' => 'Flight did not exist 🙄')));
+                    print_r(json_encode(array('error' => 'Event did not exist 🙄')));
                     die();
                 }
 

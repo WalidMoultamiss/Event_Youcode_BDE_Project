@@ -66,13 +66,11 @@ class ReservationModel
             $this->db->query("INSERT INTO
             reservation
         SET
-            accepted_return = :accepted_return,
             client = :cin,
-            flight = :flight
+            id_event = :id_event
         ");
             $this->db->bind(':cin', $data->cin);
-            $this->db->bind(':accepted_return', $data->accepted_return);
-            $this->db->bind(':flight', $data->flight);
+            $this->db->bind(':id_event', $data->id_event);
 
             $this->db->single();
             return $this->getReservationByInfos($data->cin, $data->flight);

@@ -151,9 +151,9 @@ class User extends Controller
     
     
 
-    public function delete($id){
-        $this->userModel->delete($id);
-    }
+    // public function delete($id){
+    //     $this->userModel->delete($id);
+    // }
 
     public function Token(){
         $headers = apache_request_headers();
