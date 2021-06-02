@@ -1,5 +1,9 @@
 <?php
 
+// ? how to use
+// !  $this->validate($requestJson, ["email" => "required|email", "password" => "required|min:8|max:64"]);
+
+
 class Validator
 {
   /**
@@ -8,10 +12,7 @@ class Validator
    * @var array
    */
   protected $attribute  = [];
-  protected $initRules = [
-    "email",
-    "required"
-  ];
+
   public function __construct()
   {
     //
