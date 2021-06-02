@@ -1,5 +1,6 @@
 <?php
 
+
 // ? how to use
 // !  $this->validate($requestJson, ["email" => "required|email", "password" => "required|min:8|max:64"]);
 
@@ -20,13 +21,13 @@ class Validator
 
   public function validate(array $request, array $rules)
   {
-    //? validate json request
+
     if (!$this->validateJson($request)) {
-      return (object)["error" => true, "message" => 'Content-Type header must be set to application/json'];
+      return (object)["error" => true, "message" => 'Content-Type must be application/json'];
     }
-    //? validate request is same as schema we defined
+
     if (!$this->array_matche(array_keys($request), array_keys($rules))) {
-      return (object)["error" => true, "message" => 'something went wrong 😵'];
+      return (object)["error" => true, "message" => 'Body is not specified or specified incorrectly.'];
     }
 
     foreach ($request as $key => $value) {
@@ -54,6 +55,16 @@ class Validator
           case 'min':
             if (!$this->validateLen("min", $request[$key], $len[1])) {
               array_push($this->attribute, "The $key must be at least $len[1] characters.");
+            }
+            break;
+          case 'integer':
+            if (!$this->validateInteger($request[$key])) {
+              array_push($this->attribute, "The $key must be integer");
+            }
+            break;
+          case 'date':
+            if (!$this->validateDate($request[$key])) {
+              array_push($this->attribute, "The $key is not valid date");
             }
             break;
         }
@@ -148,5 +159,113 @@ class Validator
     if (strtolower($attribute) === 'min') {
       return strlen(trim($value)) >= $len;
     }
+  }
+
+  /**
+   * Validate that an attribute is an integer.
+   *
+   * @param  mixed  $value
+   * @return bool
+   */
+  public function validateInteger($value): bool
+  {
+    return filter_var($value, FILTER_VALIDATE_INT) !== false;
+  }
+
+  /**
+   * Validate that an attribute is a valid date.
+   *
+   * @param  mixed  $value
+   * @return bool
+   */
+  public function validateDate($value): bool
+  {
+
+    if ((!is_string($value) && !is_numeric($value))) {
+      return false;
+    }
+
+    $date = date_parse($value);
+    return checkdate($date['month'], $date['day'], $date['year']);
+  }
+
+
+  /**
+   * Store the uploaded file on a filesystem disk.
+   *
+   * @param  string  $path
+   * @param  array|string  $options
+   */
+  public function upload($name = '')
+  {
+    $exist = $_FILES[$name] ?? false;
+
+    if ($exist === false) {
+      return $this->getInfo(false, "No file sent.");
+    }
+
+    $file = (object)$_FILES[$name];
+
+    if ($file->error !== UPLOAD_ERR_OK) {
+      return $this->getInfo(false, "UPLOAD_ERR_OK");
+    }
+
+    if ($file->size > 1000000) {
+      return $this->getInfo(false, "Exceeded filesize limit.");
+    }
+
+    $allow = $this->validateType($this->extension($file->name));
+
+    if ($allow === false) {
+      return $this->getInfo(false, "Type of files are not allowed.");
+    }
+
+    $dir = __DIR__ . '/storage/' . $this->hashName() . $this->extension($file->name);
+
+    if (move_uploaded_file($file->tmp_name, $dir)) {
+      return $this->getInfo(false, "uploaded file.");
+    } else {
+      return $this->getInfo(false, "Failed to move uploaded file.");
+    }
+  }
+
+  /**
+   * Get a filename for the file.
+   *
+   * @return string
+   */
+  public function hashName()
+  {
+    return  time() . '.' .  uniqid() . '.';
+  }
+
+  /**
+   * Get the file's extension.
+   * @param  string  $name
+   * 
+   * @return string
+   */
+  public function extension($name): string
+  {
+    $ext = strtolower(explode('.', $name)[1]);
+    return $ext ?? "";
+  }
+
+
+  /**
+   * Validate the MIME type of a file is an image MIME type.
+   *
+   * @param  mixed  $value
+   * @return bool
+   */
+  public function validateType($value): bool
+  {
+    return in_array($value, ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp']);
+  }
+
+
+  public function getInfo($status, $message)
+  {
+    return (object)["status" => $status, "message" => $message];
   }
 }
