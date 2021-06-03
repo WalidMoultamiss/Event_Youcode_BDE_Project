@@ -1,76 +1,79 @@
 <?php
 
-
-// ? how to use
-// !  $this->validate($requestJson, ["email" => "required|email", "password" => "required|min:8|max:64"]);
-
-
-class Validator
+class Middleware
 {
   /**
    * The rules to be applied to the data.
-   *
+   * 
    * @var array
    */
   protected $attribute  = [];
 
-  public function __construct()
-  {
-    //
-  }
-
-  public function validate(array $request, array $rules)
+  /**
+   * Validate the given request with the given rules.
+   *
+   * @param  string|JSON  $request
+   * @param  array  $rules
+   * @return array
+   */
+  public function validate($request, array $rules = [])
   {
 
     if (!$this->validateJson($request)) {
-      return (object)["error" => true, "message" => 'Content-Type must be application/json'];
+      return (object)["error" => true, "message" => 'Content must be json'];
     }
+
+    $request = json_decode($request, true);
 
     if (!$this->array_matche(array_keys($request), array_keys($rules))) {
-      return (object)["error" => true, "message" => 'Body is not specified or specified incorrectly.'];
+      return (object)["error" => true, "message" => 'Content is not specified or specified incorrectly.'];
     }
 
-    foreach ($request as $key => $value) {
-      array_map(function ($v) use ($request, $key) {
-        if (strpos($v, ':') !== false) {
-          $len = explode(':', $v, 2);
-          $v = $len[0];
-        }
+    foreach ($request as $key => $_) {
+      $this->attribute[$key] = [];
+      foreach ($this->explodeExplicitRule($rules[$key]) as $v) {
         switch ($v) {
           case 'required':
             if (!$this->validateRequired($request[$key])) {
-              array_push($this->attribute[$key], "The $key field is required.");
+              array_push($this->attribute[$key], [$v => "The $key field is required."]);
             }
             break;
           case 'email':
             if (!$this->validateEmail($request[$key])) {
-              array_push($this->attribute, "Please enter a valid email address.");
-            }
-            break;
-          case 'max':
-            if (!$this->validateLen("max", $request[$key], $len[1])) {
-              array_push($this->attribute, "The $key must not be greater than $len[1] characters.");;
-            }
-            break;
-          case 'min':
-            if (!$this->validateLen("min", $request[$key], $len[1])) {
-              array_push($this->attribute, "The $key must be at least $len[1] characters.");
+              array_push($this->attribute[$key], [$v => "Please enter a valid email address."]);
             }
             break;
           case 'integer':
             if (!$this->validateInteger($request[$key])) {
-              array_push($this->attribute, "The $key must be integer");
+              array_push($this->attribute[$key], [$v => "The $key must be integer"]);
             }
             break;
           case 'date':
             if (!$this->validateDate($request[$key])) {
-              array_push($this->attribute, "The $key is not valid date");
+              array_push($this->attribute[$key], [$v => "The $key is not valid date"]);
+            }
+          case preg_match('/\w+:\d+/', $v) ? true : false:
+            $len = explode(':', $v, 2);
+            $attr = $len[0];
+            $num = $len[1];
+            switch ($attr) {
+              case 'max':
+                if (!$this->validateLen("max", $request[$key], $len[1])) {
+                  array_push($this->attribute[$key], [$attr => "The $key must not be greater than $num characters."]);
+                }
+                break;
+              case 'min':
+                if (!$this->validateLen("min", $request[$key], $len[1])) {
+                  array_push($this->attribute[$key], [$attr => "The $key must be at least $num characters."]);
+                }
+                break;
             }
             break;
         }
-      }, $this->explodeExplicitRule($rules[$key]));
+      }
     }
-    return (object)["error" => !empty($this->attribute), "message" => $this->attribute];
+
+    return (object)["error" => !empty(array_filter($this->attribute)), "attribute" => $this->attribute];
   }
 
 
@@ -148,7 +151,7 @@ class Validator
    *
    * @param  string  $attribute
    * @param  mixed  $value
-   * @param  array  $parameters
+   * @param  int  $len
    * @return bool
    */
   public function validateLen($attribute, $value, $len): bool
@@ -189,7 +192,6 @@ class Validator
     return checkdate($date['month'], $date['day'], $date['year']);
   }
 
-
   /**
    * Store the uploaded file on a filesystem disk.
    *
@@ -223,7 +225,7 @@ class Validator
     $dir = __DIR__ . '/storage/' . $this->hashName() . $this->extension($file->name);
 
     if (move_uploaded_file($file->tmp_name, $dir)) {
-      return $this->getInfo(false, "uploaded file.");
+      return $this->getInfo(true, "uploaded file.");
     } else {
       return $this->getInfo(false, "Failed to move uploaded file.");
     }
@@ -242,7 +244,6 @@ class Validator
   /**
    * Get the file's extension.
    * @param  string  $name
-   * 
    * @return string
    */
   public function extension($name): string
@@ -250,7 +251,6 @@ class Validator
     $ext = strtolower(explode('.', $name)[1]);
     return $ext ?? "";
   }
-
 
   /**
    * Validate the MIME type of a file is an image MIME type.
@@ -262,7 +262,6 @@ class Validator
   {
     return in_array($value, ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp']);
   }
-
 
   public function getInfo($status, $message)
   {
