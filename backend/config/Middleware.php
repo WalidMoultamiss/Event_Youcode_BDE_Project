@@ -1,13 +1,13 @@
-<?php
 
 class Middleware
 {
   /**
-   * The rules to be applied to the data.
+   * The message to be applied to the data.
    * 
    * @var array
    */
   protected $attribute  = [];
+
 
   /**
    * Validate the given request with the given rules.
@@ -195,8 +195,7 @@ class Middleware
   /**
    * Store the uploaded file on a filesystem disk.
    *
-   * @param  string  $path
-   * @param  array|string  $options
+   * @param  string  $name
    */
   public function upload($name = '')
   {
@@ -222,12 +221,28 @@ class Middleware
       return $this->getInfo(false, "Type of files are not allowed.");
     }
 
-    $dir = __DIR__ . '/storage/' . $this->hashName() . $this->extension($file->name);
+    $nm = $this->hashName() . $this->extension($file->name);
+    $dir = __DIR__ . '/storage/' . $nm;
 
     if (move_uploaded_file($file->tmp_name, $dir)) {
-      return $this->getInfo(true, "uploaded file.");
+      return $this->getInfo(true, $nm);
     } else {
       return $this->getInfo(false, "Failed to move uploaded file.");
+    }
+  }
+
+  /**
+   * Store the uploaded file on a filesystem disk.
+   *
+   * @param  string  $path
+   */
+  public function removeUploaded($path = null)
+  {
+    $dir = __DIR__ . '/storage/' . $path;
+    if (unlink($dir)) {
+      return $this->getInfo(true, "Removed.");
+    } else {
+      return $this->getInfo(false, "something went wrong!");
     }
   }
 
