@@ -60,7 +60,11 @@ class Middleware
     foreach ($request as $key => $_) {
       $this->attribute[$key] = [];
       foreach ($this->explodeExplicitRule($rules[$key]) as $v) {
+        $v = trim($v);
         switch ($v) {
+          case '':
+            array_push($this->attribute[$key], [$v => ""]);
+            break;
           case 'required':
             if (!$this->validateRequired($request[$key])) {
               array_push($this->attribute[$key], [$v => "The $key field is required."]);
