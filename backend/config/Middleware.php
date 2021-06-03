@@ -1,32 +1,5 @@
 <?php
 
-// ? How to use 
-
-/*
- ! availebel_Rules = [required,integer,max:10,min:10,date,email];
-
-  $rules = [
-    'id' => 'required|integer',
-    'name' => 'required|max:255',
-    'date' => 'required|date',
-    'email' =>'required|email'
-    'password'=> 'required|min:8|max:255'
-  }
-
-  ? $resposne = $middleware->validate($json,$rules) ;
-
- */
-
-
-/**
-  $name = name of file
-  ? $resposne = $middleware->uplaod($name) ;
-
-  $path = path of file
-  $resposne = $middleware->removeUploaded($path) ;
-
- */
-
 class Middleware
 {
   /**
@@ -60,10 +33,8 @@ class Middleware
     foreach ($request as $key => $_) {
       $this->attribute[$key] = [];
       foreach ($this->explodeExplicitRule($rules[$key]) as $v) {
-        $v = trim($v);
-        switch ($v) {
+        switch (trim($v)) {
           case '':
-            array_push($this->attribute[$key], [$v => ""]);
             break;
           case 'required':
             if (!$this->validateRequired($request[$key])) {
@@ -105,7 +76,8 @@ class Middleware
       }
     }
 
-    return (object)["error" => !empty(array_filter($this->attribute)), "attribute" => $this->attribute];
+    $att = array_filter($this->attribute);
+    return (object)["error" => !empty($att), "attribute" => array_filter($att)];
   }
 
 
@@ -313,10 +285,5 @@ class Middleware
   public function getInfo($status, $message)
   {
     return (object)["status" => $status, "message" => $message];
-  }
-
-  public function rateLimit()
-  {
-    //
   }
 }
