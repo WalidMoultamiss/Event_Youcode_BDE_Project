@@ -10,6 +10,7 @@ class Core
     protected $Method = 'index';
     protected $params = 'params';
     protected $Data = [];
+    
 
     public function __construct()
     {
@@ -29,7 +30,7 @@ class Core
             }
         }
 
-        $this->Controller->data = file_get_contents("php://input") ? json_decode(file_get_contents("php://input")) : [];
+        $this->Controller->data = file_get_contents("php://input") ? file_get_contents("php://input") : [];
         $this->params = $url ? array_values($url) : [];
 
         call_user_func_array([$this->Controller, $this->Method], $this->params);

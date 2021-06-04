@@ -11,7 +11,12 @@ class Event extends Controller
     public function __construct()
     {
         $this->eventModel = $this->model('EventModel');
+        $this->notifModel = $this->model('notifModel');
+        $this->userModel = $this->model('UserModel');
     }
+
+
+    
 
     public function events()
     {
@@ -41,105 +46,164 @@ class Event extends Controller
             try {
                 // dont forget to take out the student role
                 $infos = $this->verifyAuth($headers[1]);
-                
                 if ($infos->role == "student") {
-                    $flight = $this->eventModel->add($this->data);
-                    if ($flight) {
+                    try{
+                    $currentUser = $this->userModel->getEmailById($infos->id);
+                }catch (\Throwable $th) {
+                    print_r(json_encode(array(
+                        'error' => "error can't get info user",
+                    )));
+                }
+                    $event = $this->eventModel->add($this->data);
+                    if ($event) {
+                        $notif = $this->notifModel->add("event added by the user: $currentUser->email");
                         print_r(json_encode(array(
-                            "message" => "Flight Created with success 💥",
+                            "message" => "Event Created with success",
                         )));
                     }
                 } else {
                     print_r(json_encode(array(
-                        'error' => "You Don't Have Permition to make this action 💢 ",
+                        'error' => "You Don't Have Permission to make this action",
                     )));
                     die();
                 }
             } catch (\Throwable $th) {
                 print_r(json_encode(array(
-                    'error' => "Authentication error 1💢 ",
+                    'error' => "Authentication error 1",
                 )));
             }
         } else {
             print_r(json_encode(array(
-                'error' => "Authentication error 2💢 ",
+                'error' => "Authentication error 2",
             )));
         }
     }
 
     public function archive($id)
     {
-        if($this->eventModel->archive($id)){
-        print_r(json_encode(array("message"=>"the status of the id:$id has been set to archived")));
-        }else{
-            print_r(json_encode(array("error"=>"error")));
-        }
-        
-    }
-
-
-    public function highlighted($id)
-    {
-        if($this->eventModel->highlighted($id)){
-            print_r(json_encode(array("message"=>"the status of the id:$id has been set to highlighted")));
-            }else{
-                print_r(json_encode(array("error"=>"error")));
-            }
-    }
-
-
-    public function regular($id)
-    {
-        print_r($id);
-
-        {
-            if($this->eventModel->regular($id)){
-                print_r(json_encode(array("message"=>"the status of the id:$id has been set to regular")));
-                }else{
-                    print_r(json_encode(array("error"=>"error")));
-                }
-        }
-    }
-
-
-    public function edit($id)
-    {
-
         $headers = apache_request_headers();
         $headers = isset($headers['Authorization']) ? explode(' ', $headers['Authorization']) : null;
         if ($headers) {
             try {
+                // dont forget to take out the student role
                 $infos = $this->verifyAuth($headers[1]);
                 if ($infos->role == "student") {
-                    $flight = $this->eventModel->edit($this->data, $id);
-                    if ($flight) {
+                    try{
+                    $currentUser = $this->userModel->getEmailById($infos->id);
+                    }catch (\Throwable $th) {
                         print_r(json_encode(array(
-                            "message" => "Flight Edited with success 💥",
+                            'error' => "error can't get info user",
                         )));
-                    }
-                } else {
-                    print_r(json_encode(array(
-                        'error' => "You Don't Have Permission to make this action 💢 ",
-                    )));
-                    die();
+                        die();
+                    }if($this->eventModel->archive($id)){
+                            $notif = $this->notifModel->add("event has been archived by the user: $currentUser->email");
+                            print_r(json_encode(array("message"=>"the status of the id:$id has been set to archived")));
+                        }else{
+                            print_r(json_encode(array("error"=>"error can't archive the event")));
+                            die();
+                            }
+                    }else {
+                        print_r(json_encode(array(
+                            'error' => "You Don't Have Permission to make this action",
+                        )));
+                        die();
+                        }
+                }catch (\Throwable $th) {
+                            print_r(json_encode(array(
+                                'error' => "Authentication error 1",
+                            )));
                 }
-            } catch (\Throwable $th) {
+            }else {
                 print_r(json_encode(array(
-                    'error' => "Authentication error 💢 ",
-                )));
+                'error' => "Authentication error 2",
+                )));}
             }
-        } else {
-            print_r(json_encode(array(
-                'error' => "Authentication error 💢 "
-            )));
-        }
-
-    }
 
 
-    public function search(){
-        $result = $this->eventModel->getBySearch($this->data);
-        print_r(json_encode($result));
-    }
+
+
+    public function highlighted($id)
+    {
+        $headers = apache_request_headers();
+        $headers = isset($headers['Authorization']) ? explode(' ', $headers['Authorization']) : null;
+        if ($headers) {
+            try {
+                // dont forget to take out the student role
+                $infos = $this->verifyAuth($headers[1]);
+                if ($infos->role == "student") {
+                    try{
+                    $currentUser = $this->userModel->getEmailById($infos->id);
+                    }catch (\Throwable $th) {
+                        print_r(json_encode(array(
+                            'error' => "error can't get info user",
+                        )));
+                        die();
+                    }if($this->eventModel->archive($id)){
+                            $notif = $this->notifModel->add("event has been highlighted by the user: $currentUser->email");
+                            print_r(json_encode(array("message"=>"the status of the id:$id has been set to highlighted")));
+                        }else{
+                            print_r(json_encode(array("error"=>"error can't highlight the event")));
+                            die();
+                            }
+                    }else {
+                        print_r(json_encode(array(
+                            'error' => "You Don't Have Permission to make this action",
+                        )));
+                        die();
+                        }
+                }catch (\Throwable $th) {
+                            print_r(json_encode(array(
+                                'error' => "Authentication error 1",
+                            )));
+                }
+            }else {
+                print_r(json_encode(array(
+                'error' => "Authentication error 2",
+                )));}
+            }
+
+
+
+
+
+    public function regular($id)
+    {
+        $headers = apache_request_headers();
+        $headers = isset($headers['Authorization']) ? explode(' ', $headers['Authorization']) : null;
+        if ($headers) {
+            try {
+                // dont forget to take out the student role
+                $infos = $this->verifyAuth($headers[1]);
+                if ($infos->role == "student") {
+                    try{
+                    $currentUser = $this->userModel->getEmailById($infos->id);
+                    }catch (\Throwable $th) {
+                        print_r(json_encode(array(
+                            'error' => "error can't get info user",
+                        )));
+                        die();
+                    }if($this->eventModel->regular($id)){
+                            $notif = $this->notifModel->add("event has been set to regular by the user: $currentUser->email");
+                            print_r(json_encode(array("message"=>"the status of the id:$id has been set to regular")));
+                        }else{
+                            print_r(json_encode(array("error"=>"error can't set the event to regular")));
+                            die();
+                            }
+                    }else {
+                        print_r(json_encode(array(
+                            'error' => "You Don't Have Permission to make this action",
+                        )));
+                        die();
+                        }
+                }catch (\Throwable $th) {
+                            print_r(json_encode(array(
+                                'error' => "Authentication error 1",
+                            )));
+                }
+            }else {
+                print_r(json_encode(array(
+                'error' => "Authentication error 2",
+                )));}
+            }
 
 }

@@ -15,10 +15,10 @@ class UserModel
         return $this->db->all();
     }
 
-    public function getUserById($cin)
+    public function getUserById($id)
     {
-        $this->db->query("SELECT * FROM members WHERE cin = :cin");
-        $this->db->bind(':cin', $cin);
+        $this->db->query("SELECT * FROM members WHERE id = :id");
+        $this->db->bind(':id', $id);
         return $this->db->single();
     }
 
@@ -28,6 +28,14 @@ class UserModel
         $this->db->bind(':email', $email);
         return $this->db->single();
     }
+
+    public function getEmailById($id)
+    {
+        $this->db->query("SELECT email FROM members WHERE id = :id");
+        $this->db->bind(':id', $id);
+        return $this->db->single();
+    }
+
 
     public function getUserByRole($role)
     {

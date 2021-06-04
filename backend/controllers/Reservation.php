@@ -11,7 +11,7 @@ class Reservation extends Controller
     public function __construct()
     {
         $this->resModel = $this->model('ReservationModel');
-        $this->flightModel = $this->model('FlightModel');
+        $this->eventModel = $this->model('EventModel');
     }
 
     public function myReservation()
@@ -38,7 +38,7 @@ class Reservation extends Controller
         if ($headers) {
             try {
                 $infos = $this->verifyAuth($headers[1]);
-                // dint forget student to admin
+                // don't forget student to admin
                 if ($infos->role == "student") {
                     $reservations = $this->resModel->getReservations();
                     if ($reservations) {
@@ -65,19 +65,22 @@ class Reservation extends Controller
 
     public function add()
     {
+        
 
         $headers = apache_request_headers();
         $headers = isset($headers['Authorization']) ? explode(' ', $headers['Authorization']) : null;
-        $cin = $this->verifyAuth($headers[1]);
-        $cin = $cin->cin;
+        $data = $this->verifyAuth($headers[1]);
+        $id_member= $data->id;
         if ($headers) {
             try {
-                $currentEvent = $this->eventModel->eventInfo($this->data->event);
+                $currentEvent = $this->eventModel->eventInfo($this->data->id_event);
+                // die(var_dump($currentEvent));
                 if ($currentEvent) {
-                    if ($currentEvent->available_places >= $this->data->guests) {
+                    if ($currentEvent->max_places >= 1) {
                         $result = $this->resModel->add($this->data);
-                        $currentEvent->available_places = $currentEvent->available_places - $this->data->guests;
-                        $this->eventModel->edit($currentEvent, $this->data->event);
+                        unset($result->password);
+                        $currentEvent->max_places = $currentEvent->max_places - 1;
+                        $this->eventModel->edit($currentEvent);
                     } else {
                         print_r(json_encode(array('error' => 'Event Full bro 😩')));
                         die();

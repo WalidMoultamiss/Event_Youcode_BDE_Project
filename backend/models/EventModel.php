@@ -119,41 +119,14 @@ class EventModel
         return true;
     }
 
-    public function ReturnFlights($id)
+
+
+    public function edit($eventData)
     {
-        $currFlight = $this->flightInfo($id);
-        if ($currFlight) {
-            $this->db->query("SELECT * FROM flight WHERE CityFrom = :CityFrom AND CityTo = :CityTo ");
-            $this->db->bind(':CityTo', $currFlight->CityFrom);
-            $this->db->bind(':CityFrom', $currFlight->CityTo);
-            
-            // $this->db->bind(':going_time', explode(' ', $currFlight->going_time)[0]);
-            return $result = $this->db->all();
-        }
-        // print_r($currFlight);
-        
-    }
-
-
-    public function getBySearch($data)
-    {
-        try {
-            $this->db->query("SELECT * FROM
-                flight
-            WHERE
-                 CityTo = :CityTo and airport = :airport
-            BETWEEN :going_time '00:00:00' AND :going_time '23:59:59'
-            ");
-            $this->db->bind(':going_time', $data->going_time);
-            $this->db->bind(':airport', $data->airport);
-            $this->db->bind(':CityTo', $data->CityTo);
-            $result = $this->db->all();
-            return $result;
-
-        } catch (\PDOExeption $err) {
-            return $err->getMessage();
-        }
-
+        $this->db->query("UPDATE `events` SET `max_places`=:max_places WHERE id=:id");
+        $this->db->bind(':id', $eventData->id);
+        $this->db->bind(':max_places', $eventData->max_places);
+        return $this->db->all();
     }
 
 }

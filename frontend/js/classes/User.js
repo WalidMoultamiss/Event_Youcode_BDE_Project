@@ -4,8 +4,6 @@ class User {
     userData
 
 
-
-
     login = (email, password) => {
         fetch(`${this.url}/login`, {
             method: 'POST',

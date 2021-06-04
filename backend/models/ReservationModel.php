@@ -21,59 +21,51 @@ class ReservationModel
         return $this->db->all();
     }
 
-    public function getReservationByInfos($cin, $flight)
+    public function getReservationByInfos($id, $events)
     {
-        $this->db->query("SELECT * FROM
-            reservation
-        WHERE client = :Client AND flight = :flight AND reserved_time
-        ORDER BY  reserved_time DESC
-        LIMIT 1");
-
-        $this->db->bind(':Client', $cin);
-        $this->db->bind(':flight', $flight);
+        $this->db->query("SELECT * FROM 
+            reservation r
+        INNER JOIN members on members.id = :id INNER JOIN events on events.id = :id_events");
+        $this->db->bind(':id', $id);
+        $this->db->bind(':id_events', $events);
         return $this->db->single();
     }
 
-    public function addWithReturn($data)
-    {
-        try {
-            $this->db->query("INSERT INTO
-                reservation
-            SET
-                accepted_return = :accepted_return,
-                client = :cin,
-                flight = :flight,
-                return_Flight = :return_Flight
-            ");
-            $this->db->bind(':cin', $data->cin);
-            $this->db->bind(':accepted_return', $data->accepted_return);
-            $this->db->bind(':flight', $data->flight);
-            $this->db->bind(':return_Flight', $data->return_Flight);
+    // public function addWithReturn($data)
+    // {
+    //     try {
+    //         $this->db->query("INSERT INTO
+    //             reservation
+    //         SET
+    //             id = :id,
+    //             events = :events
+    //         ");
+    //         $this->db->bind(':id', $data->id);
+    //         $this->db->bind(':events', $data->events);
+    //         $this->db->single();
+    //         return $this->getReservationByInfos($data->id, $data->events);
+    //     } catch (\PDOExeption $err) {
+    //         return $err->getMessage();
+    //         die();
+    //     }
 
-            $this->db->single();
-            return $this->getReservationByInfos($data->cin, $data->flight);
-        } catch (\PDOExeption $err) {
-            return $err->getMessage();
-            die();
-        }
-
-        return true;
-    }
+    //     return true;
+    // }
 
     public function add($data)
     {
+        // die(var_dump($data));
         try {
             $this->db->query("INSERT INTO
             reservation
         SET
-            client = :cin,
+            id_member = :id_member,
             id_event = :id_event
         ");
-            $this->db->bind(':cin', $data->cin);
+            $this->db->bind(':id_member', $data->id_member);
             $this->db->bind(':id_event', $data->id_event);
-
             $this->db->single();
-            return $this->getReservationByInfos($data->cin, $data->flight);
+            return $this->getReservationByInfos($data->id_member, $data->id_event);
         } catch (\PDOExeption $err) {
             return $err->getMessage();
             die();
@@ -88,4 +80,7 @@ class ReservationModel
         $this->db->bind(':id', $id);
         $this->db->execute();
     }
+
+
+    
 }
