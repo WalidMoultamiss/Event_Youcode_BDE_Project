@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 04, 2021 at 03:30 PM
--- Server version: 10.4.19-MariaDB
--- PHP Version: 8.0.6
+-- Generation Time: Jun 01, 2021 at 12:01 PM
+-- Server version: 10.4.18-MariaDB
+-- PHP Version: 8.0.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,31 +18,8 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `events_youcode`
+-- Database: `event_youcode`
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `auth`
---
-
-CREATE TABLE `auth` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `refreshToken` text NOT NULL,
-  `expired` int(11) NOT NULL DEFAULT 0,
-  `count` int(11) NOT NULL DEFAULT 0,
-  `created_At` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `auth`
---
-
-INSERT INTO `auth` (`id`, `user_id`, `refreshToken`, `expired`, `count`, `created_At`) VALUES
-(95, 5, 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJsb2NhbGhvc3QiLCJhdWQiOiJsb2NhbGhvc3QiLCJpYXQiOjE2MjI4MDE1NzgsImV4cCI6MTYyMjgwMTYzOCwiaWQiOiI1Iiwicm9sZSI6IkFkbWluIn0.pie61sD-r3oFW-f28iQ1uf5mbSnrChZu-ZrmKzy9oc5IRoarPYxXPralfgd27tjVOp4uNviqk6hCo4TYBPORTA', 0, 0, '2021-06-04 11:12:58'),
-(96, 5, 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJsb2NhbGhvc3QiLCJhdWQiOiJsb2NhbGhvc3QiLCJpYXQiOjE2MjI4MDQzODYsImV4cCI6MTYyMjgwNDQ0NiwiaWQiOiI1Iiwicm9sZSI6IkFkbWluIn0.Y3v5u7LMQTHwBDgEvxV3R_eoj0c9OmJ5_7prqGUUcii2Pzcu5OqpEGvlvEw6j1tw18fxlRY3bY38d-DwHNn7lg', 0, 0, '2021-06-04 11:59:46');
 
 -- --------------------------------------------------------
 
@@ -111,8 +88,7 @@ CREATE TABLE `members` (
 --
 
 INSERT INTO `members` (`id`, `email`, `first_name`, `last_name`, `cin`, `password`, `archived`, `role`, `url_img`, `status`, `phone`, `birth_date`) VALUES
-(1, 'walidmoultamis@gmail.com', 'walid', 'moultamiss', 'BM21352', '$2y$10$XSpKxtT.zRTzYq5My89LQu0BE3Sd7uN9O8aw3o/zzaKmIK6im2M02', 0, 'student', '', '0', '0622657350', '1996-06-06'),
-(5, 'youssbak.2015@gmail.com', 'youssef', 'allo', 'ZT233080', '$2y$10$ZxaUB07yxoP9XgidX7ZwIuGRFGKCVT5K7BW4jFmnG.toAq1nRHFHq', 0, 'Admin', '', 'active', '0649621171', '1997-01-01');
+(1, 'walidmoultamis@gmail.com', 'walid', 'moultamiss', 'BM21352', '$2y$10$XSpKxtT.zRTzYq5My89LQu0BE3Sd7uN9O8aw3o/zzaKmIK6im2M02', 0, 'student', '', '0', '0622657350', '1996-06-06');
 
 -- --------------------------------------------------------
 
@@ -174,13 +150,6 @@ CREATE TABLE `suggestion` (
 --
 
 --
--- Indexes for table `auth`
---
-ALTER TABLE `auth`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
-
---
 -- Indexes for table `class`
 --
 ALTER TABLE `class`
@@ -234,12 +203,6 @@ ALTER TABLE `suggestion`
 --
 
 --
--- AUTO_INCREMENT for table `auth`
---
-ALTER TABLE `auth`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
-
---
 -- AUTO_INCREMENT for table `class`
 --
 ALTER TABLE `class`
@@ -255,7 +218,7 @@ ALTER TABLE `events`
 -- AUTO_INCREMENT for table `members`
 --
 ALTER TABLE `members`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `notification`
@@ -284,12 +247,6 @@ ALTER TABLE `suggestion`
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `auth`
---
-ALTER TABLE `auth`
-  ADD CONSTRAINT `auth_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `members` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `class`

@@ -39,20 +39,9 @@ class AuthModel
 
     public function expiredToken($id)
     {
-        $this->db->query("UPDATE Auth
-        SET
-            expired = :expired WHERE id = :id");
+        $this->db->query("DELETE FROM Auth WHERE id = :id");
         $this->db->bind(':id', $id);
-        $this->db->bind(':expired', 1);
         return $this->db->single();
     }
-    public function count($id,$count)
-    {
-        $this->db->query("UPDATE Auth
-        SET
-            count = :count WHERE id = :id");
-        $this->db->bind(':id', $id);
-        $this->db->bind(':count', $count);
-        return $this->db->single();
-    }
+    
 }

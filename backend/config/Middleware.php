@@ -325,7 +325,7 @@ class Middleware
     public function getToken($cin, $role)
     {
         $iat = time();
-        $exp = $iat + 60 * 0.3;
+        $exp = $iat + 60 * 0.1;
         $payload = array(
             "iss" => "localhost",
             "aud" => "localhost",
@@ -355,7 +355,7 @@ class Middleware
     public function getRefrechToken($id, $role)
     {
         $iat = time();
-        $exp = $iat + 60 * 1;
+        $exp = $iat + 60 * 0.5;
         $payload = array(
             "iss" => "localhost",
             "aud" => "localhost",
